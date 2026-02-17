@@ -13,6 +13,7 @@ import org.example.booker.model.AuthRequest;
 import org.example.booker.model.Booking;
 import org.example.booker.model.BookingDates;
 import org.example.booker.model.BookingResponse;
+import org.example.booker.tests.utils.ApiClient;
 import org.example.booker.tests.utils.AppConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -30,40 +31,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BaseTest {
 
     protected static final AppConfig CFG = ConfigFactory.create(AppConfig.class);
-
-    protected BookingApi bookingApi;
-    protected AuthenticationApi authApi;
-
-    @BeforeAll
-    void setup() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder()
-                            .header("Content-Type", CFG.contentType())
-                            .header("Accept", CFG.acceptHeader())
-                            .build();
-                    return chain.proceed(request);
-                })
-                .build();
-
-        Gson gson = Converters.registerAll(new GsonBuilder())
-                .setLenient()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(CFG.baseUrl())
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        bookingApi = retrofit.create(BookingApi.class);
-        authApi = retrofit.create(AuthenticationApi.class);
+    private final ApiClient apiFactory = new ApiClient();
+    protected BookingApi bookingApi(){
+        return apiFactory.create(BookingApi.class);
     }
-
+    protected AuthenticationApi authApi(){
+        return apiFactory.create(AuthenticationApi.class);
+    };
     protected <T> Response<T> execute(Call<T> call) {
         try {
             Response<T> response = call.execute();
@@ -86,7 +60,7 @@ public class BaseTest {
                 .bookingdates(new BookingDates().checkin(LocalDate.now()).checkout(LocalDate.now().plusDays(7)))
                 .additionalneeds(CFG.bookingAdditional());
 
-        return execute(bookingApi.createBooking(body));
+        return execute(bookingApi().createBooking(body));
     }
 
     protected String getAuthToken() {
@@ -94,7 +68,7 @@ public class BaseTest {
                 .username(CFG.username())
                 .password(CFG.password());
 
-        var response = execute(authApi.createToken(auth));
+        var response = execute(authApi().createToken(auth));
 
         assertThat(response.isSuccessful())
                 .withFailMessage(String.format(CFG.errorAuthFail(), response.code()))

@@ -46,6 +46,6 @@ public class AuthTest extends BaseTest {
                 .username(username)
                 .password(password);
 
-        return execute(authApi.createToken(auth));
+        return execute(authApi().createToken(auth));
     }
 }

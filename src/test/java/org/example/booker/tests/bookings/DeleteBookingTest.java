@@ -1,9 +1,12 @@
 package org.example.booker.tests.bookings;
 
+import org.example.booker.model.Booking;
+import org.example.booker.model.BookingResponse;
 import org.example.booker.tests.BaseTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import retrofit2.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,23 +22,23 @@ public class DeleteBookingTest extends BaseTest {
     @Test
     @DisplayName("Удаление существующего бронирования")
     void deleteBookingTest() {
-        var createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
-        var deleteResponse = execute(bookingApi.deleteBooking(id, fullCookie));
+        Response<Void> deleteResponse = execute(bookingApi().deleteBooking(id, fullCookie));
         assertThat(deleteResponse.code()).isEqualTo(201);
 
-        var getResponse = execute(bookingApi.getBooking(id));
+        Response<Booking> getResponse = execute(bookingApi().getBooking(id));
         assertThat(getResponse.code()).isEqualTo(404);
     }
 
     @Test
     @DisplayName("Попытка удаления без токена")
     void deleteWithoutTokenTest() {
-        var createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
-        var deleteResponse = execute(bookingApi.deleteBooking(id, ""));
+        Response<Void> deleteResponse = execute(bookingApi().deleteBooking(id, ""));
         assertThat(deleteResponse.code()).isEqualTo(403);
     }
 }

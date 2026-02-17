@@ -2,10 +2,12 @@ package org.example.booker.tests.bookings;
 
 import org.example.booker.model.Booking;
 import org.example.booker.model.BookingDates;
+import org.example.booker.model.BookingResponse;
 import org.example.booker.tests.BaseTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import retrofit2.Response;
 
 import java.time.LocalDate;
 
@@ -26,7 +28,7 @@ public class UpdateBookingTest extends BaseTest {
         LocalDate checkinDate = LocalDate.now();
         LocalDate checkoutDate = LocalDate.now().plusDays(3);
 
-        var createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
 
         Integer id = createResponse.body().getBookingid();
         Booking updateData = createResponse.body().getBooking();
@@ -40,7 +42,7 @@ public class UpdateBookingTest extends BaseTest {
                 .checkout(checkoutDate));
         updateData.setAdditionalneeds("Breakfast");
 
-        var response = execute(bookingApi.updateBooking(id, fullCookie, updateData));
+        Response<Booking> response = execute(bookingApi().updateBooking(id, fullCookie, updateData));
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getFirstname()).isEqualTo("Aleks");
@@ -54,13 +56,13 @@ public class UpdateBookingTest extends BaseTest {
     @Test
     @DisplayName("Частичное обновление")
     void partialUpdate() {
-        var createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
         Booking patchData = createResponse.body().getBooking();
         patchData.setFirstname("Aleks");
 
-        var response = execute(bookingApi.updateBooking(id, fullCookie, patchData));
+        Response<Booking> response = execute(bookingApi().updateBooking(id, fullCookie, patchData));
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getFirstname()).isEqualTo("Aleks");
