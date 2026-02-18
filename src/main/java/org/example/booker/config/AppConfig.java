@@ -1,9 +1,9 @@
-package org.example.booker.tests.utils;
+package org.example.booker.config;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
 
-@Sources({"classpath:message.properties"})
+@Sources({"classpath:env.properties"})
 public interface AppConfig extends Config {
 
     @Key("base.url")
