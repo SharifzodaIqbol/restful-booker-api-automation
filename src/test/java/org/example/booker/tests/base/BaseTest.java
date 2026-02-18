@@ -1,11 +1,5 @@
-package org.example.booker.tests;
+package org.example.booker.tests.base;
 
-import com.fatboyindustrial.gsonjavatime.Converters;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import org.aeonbits.owner.ConfigFactory;
 import org.example.booker.api.AuthenticationApi;
 import org.example.booker.api.BookingApi;
@@ -13,14 +7,11 @@ import org.example.booker.model.AuthRequest;
 import org.example.booker.model.Booking;
 import org.example.booker.model.BookingDates;
 import org.example.booker.model.BookingResponse;
-import org.example.booker.tests.utils.ApiClient;
-import org.example.booker.tests.utils.AppConfig;
-import org.junit.jupiter.api.BeforeAll;
+import org.example.booker.client.ApiClient;
+import org.example.booker.config.AppConfig;
 import org.junit.jupiter.api.TestInstance;
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
