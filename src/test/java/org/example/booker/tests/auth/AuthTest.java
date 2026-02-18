@@ -2,7 +2,7 @@ package org.example.booker.tests.auth;
 
 import org.example.booker.model.AuthRequest;
 import org.example.booker.model.AuthResponse;
-import org.example.booker.tests.BaseTest;
+import org.example.booker.tests.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;

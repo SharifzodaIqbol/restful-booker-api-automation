@@ -1,7 +1,7 @@
 package org.example.booker.tests.bookings;
 
 import org.example.booker.model.BookingResponse;
-import org.example.booker.tests.BaseTest;
+import org.example.booker.tests.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
