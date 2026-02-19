@@ -14,7 +14,7 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Успешное получение токена с валидными данными")
     void loginSuccess() {
-        var response = login(
+        Response<AuthResponse>  response = login(
                 CFG.username(),
                 CFG.password()
         );
@@ -27,7 +27,7 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Ошибка авторизации при неверном пароле")
     void loginWithWrongPassword() {
-        var response = login(CFG.username(), "wrong_password");
+        Response<AuthResponse> response = login(CFG.username(), "wrong_password");
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getToken()).isNull();
@@ -36,7 +36,7 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Пустой логин")
     void loginEmpty() {
-        var response = login("", "");
+        Response<AuthResponse>  response = login("", "");
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getToken()).isNull();
     }
