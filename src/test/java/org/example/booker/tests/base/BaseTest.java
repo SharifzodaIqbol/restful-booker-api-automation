@@ -3,10 +3,7 @@ package org.example.booker.tests.base;
 import org.aeonbits.owner.ConfigFactory;
 import org.example.booker.api.AuthenticationApi;
 import org.example.booker.api.BookingApi;
-import org.example.booker.model.AuthRequest;
-import org.example.booker.model.Booking;
-import org.example.booker.model.BookingDates;
-import org.example.booker.model.BookingResponse;
+import org.example.booker.model.*;
 import org.example.booker.client.ApiClient;
 import org.example.booker.config.AppConfig;
 import org.junit.jupiter.api.TestInstance;
@@ -59,7 +56,7 @@ public class BaseTest {
                 .username(CFG.username())
                 .password(CFG.password());
 
-        var response = execute(authApi().createToken(auth));
+        Response<AuthResponse> response = execute(authApi().createToken(auth));
 
         assertThat(response.isSuccessful())
                 .withFailMessage(String.format(CFG.errorAuthFail(), response.code()))
