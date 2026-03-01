@@ -1,6 +1,5 @@
 package org.example.booker.tests.auth;
 
-import org.example.booker.model.AuthRequest;
 import org.example.booker.model.AuthResponse;
 import org.example.booker.tests.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
@@ -14,10 +13,7 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Успешное получение токена с валидными данными")
     void loginSuccess() {
-        Response<AuthResponse>  response = login(
-                CFG.username(),
-                CFG.password()
-        );
+        Response<AuthResponse> response = authService.login(CFG.username(), CFG.password());
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body()).isNotNull();
@@ -27,7 +23,7 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Ошибка авторизации при неверном пароле")
     void loginWithWrongPassword() {
-        Response<AuthResponse> response = login(CFG.username(), "wrong_password");
+        Response<AuthResponse> response = authService.login(CFG.username(), "wrong_password");
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getToken()).isNull();
@@ -36,16 +32,8 @@ public class AuthTest extends BaseTest {
     @Test
     @DisplayName("Пустой логин")
     void loginEmpty() {
-        Response<AuthResponse>  response = login("", "");
+        Response<AuthResponse> response = authService.login("", "");
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getToken()).isNull();
-    }
-
-    private Response<AuthResponse> login(String username, String password) {
-        AuthRequest auth = new AuthRequest()
-                .username(username)
-                .password(password);
-
-        return execute(authApi().createToken(auth));
     }
 }
