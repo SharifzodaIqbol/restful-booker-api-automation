@@ -1,6 +1,8 @@
 package org.example.booker.tests.service;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.example.booker.api.AuthenticationApi;
+import org.example.booker.client.ApiClient;
 import org.example.booker.config.AppConfig;
 import org.example.booker.model.AuthRequest;
 import org.example.booker.model.AuthResponse;
@@ -12,16 +14,16 @@ public class AuthService {
     private final AuthenticationApi api;
     private final AppConfig cfg;
 
-    public AuthService(AuthenticationApi api, AppConfig cfg) {
-        this.api = api;
-        this.cfg = cfg;
+    public AuthService() {
+        this.cfg = ConfigFactory.create(AppConfig.class);
+        this.api = new ApiClient().create(AuthenticationApi.class);
     }
 
     public Response<AuthResponse> login(String username, String password) {
         AuthRequest auth = new AuthRequest()
                 .username(username)
                 .password(password);
-        return ApiExecutor.execute(api.createToken(auth), cfg);
+        return ApiExecutor.execute(api.createToken(auth));
     }
 
     public String getAuthToken() {
