@@ -16,29 +16,29 @@ public class DeleteBookingTest extends BaseTest {
 
     @BeforeAll
     void getTokenAuth() {
-        fullCookie = "token=" + getAuthToken();
+        fullCookie = "token=" + authService.getAuthToken();
     }
 
     @Test
     @DisplayName("Удаление существующего бронирования")
     void deleteBookingTest() {
-        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = bookingService.createBooking(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
-        Response<Void> deleteResponse = execute(bookingApi().deleteBooking(id, fullCookie));
+        Response<Void> deleteResponse = bookingService.deleteBooking(id, fullCookie);
         assertThat(deleteResponse.code()).isEqualTo(201);
 
-        Response<Booking> getResponse = execute(bookingApi().getBooking(id));
+        Response<Booking> getResponse = bookingService.getBooking(id);
         assertThat(getResponse.code()).isEqualTo(404);
     }
 
     @Test
     @DisplayName("Попытка удаления без токена")
     void deleteWithoutTokenTest() {
-        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = bookingService.createBooking(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
-        Response<Void> deleteResponse = execute(bookingApi().deleteBooking(id, ""));
+        Response<Void> deleteResponse = bookingService.deleteBooking(id, "");
         assertThat(deleteResponse.code()).isEqualTo(403);
     }
 }

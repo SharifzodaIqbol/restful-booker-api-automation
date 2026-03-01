@@ -17,7 +17,7 @@ public class GetBookingTest extends BaseTest {
     @Test
     @DisplayName("Проверка получения существующего бронирования")
     void getBooking() {
-        Response<BookingResponse> response = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> response = bookingService.createBooking(CFG.bookingFirstname());
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body()).isNotNull();
@@ -28,7 +28,7 @@ public class GetBookingTest extends BaseTest {
     @Test
     @DisplayName("Получение списка ID")
     void getBookingIds() {
-        Response<List<BookingId>> response = execute(bookingApi().getBookingIds());
+        Response<List<BookingId>> response = bookingService.getBookingIds();
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.isSuccessful()).isTrue();
     }
@@ -36,7 +36,7 @@ public class GetBookingTest extends BaseTest {
     @Test
     @DisplayName("Получение не существующего ID")
     void getInvalidBookingId() {
-        Response<Booking> response = execute(bookingApi().getBooking(-1));
+        Response<Booking> response = bookingService.getBooking(-1);
         assertThat(response.code()).isEqualTo(404);
         assertThat(response.body()).isNull();
     }

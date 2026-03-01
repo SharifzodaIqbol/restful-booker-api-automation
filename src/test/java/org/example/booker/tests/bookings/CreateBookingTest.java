@@ -13,7 +13,7 @@ public class CreateBookingTest extends BaseTest {
     @Test
     @DisplayName("Создание нового бронирования")
     void createValidBooking() {
-        Response<BookingResponse> response = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> response = bookingService.createBooking(CFG.bookingFirstname());
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body()).isNotNull();
@@ -25,7 +25,7 @@ public class CreateBookingTest extends BaseTest {
     @Test
     @DisplayName("Создание нового бронирования без имени бронировщика")
     void createInvalidBooking() {
-        Response<BookingResponse> response = createBookingAndGetId("");
+        Response<BookingResponse> response = bookingService.createBooking("");
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getBooking().getFirstname()).isBlank();
     }

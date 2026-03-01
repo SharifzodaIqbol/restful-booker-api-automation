@@ -18,17 +18,16 @@ public class UpdateBookingTest extends BaseTest {
 
     @BeforeAll
     void getTokenAuth() {
-        fullCookie = "token=" + getAuthToken();
+        fullCookie = "token=" + authService.getAuthToken();
     }
 
     @Test
     @DisplayName("Полное обновление")
     void fullUpdate() {
-
         LocalDate checkinDate = LocalDate.now();
         LocalDate checkoutDate = LocalDate.now().plusDays(3);
 
-        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = bookingService.createBooking(CFG.bookingFirstname());
 
         Integer id = createResponse.body().getBookingid();
         Booking updateData = createResponse.body().getBooking();
@@ -42,7 +41,7 @@ public class UpdateBookingTest extends BaseTest {
                 .checkout(checkoutDate));
         updateData.setAdditionalneeds("Breakfast");
 
-        Response<Booking> response = execute(bookingApi().updateBooking(id, fullCookie, updateData));
+        Response<Booking> response = bookingService.updateBooking(id, fullCookie, updateData);
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getFirstname()).isEqualTo("Aleks");
@@ -56,13 +55,13 @@ public class UpdateBookingTest extends BaseTest {
     @Test
     @DisplayName("Частичное обновление")
     void partialUpdate() {
-        Response<BookingResponse> createResponse = createBookingAndGetId(CFG.bookingFirstname());
+        Response<BookingResponse> createResponse = bookingService.createBooking(CFG.bookingFirstname());
         Integer id = createResponse.body().getBookingid();
 
         Booking patchData = createResponse.body().getBooking();
         patchData.setFirstname("Aleks");
 
-        Response<Booking> response = execute(bookingApi().updateBooking(id, fullCookie, patchData));
+        Response<Booking> response = bookingService.updateBooking(id, fullCookie, patchData);
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getFirstname()).isEqualTo("Aleks");
