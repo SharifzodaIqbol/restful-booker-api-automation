@@ -3,6 +3,7 @@ package org.example.booker.tests.bookings;
 import org.example.booker.model.Booking;
 import org.example.booker.model.BookingId;
 import org.example.booker.model.BookingResponse;
+import org.example.booker.tests.service.BookingService;
 import org.example.booker.tests.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetBookingTest extends BaseTest {
 
+    private final BookingService bookingService = new BookingService();
+
     @Test
     @DisplayName("Проверка получения существующего бронирования")
     void getBooking() {
@@ -21,8 +24,7 @@ public class GetBookingTest extends BaseTest {
 
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body()).isNotNull();
-        assertThat(response.body().getBooking().getFirstname())
-                .isEqualTo(CFG.bookingFirstname());
+        assertThat(response.body().getBooking().getFirstname()).isEqualTo(CFG.bookingFirstname());
     }
 
     @Test

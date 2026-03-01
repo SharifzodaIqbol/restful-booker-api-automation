@@ -3,6 +3,8 @@ package org.example.booker.tests.bookings;
 import org.example.booker.model.Booking;
 import org.example.booker.model.BookingDates;
 import org.example.booker.model.BookingResponse;
+import org.example.booker.tests.service.AuthService;
+import org.example.booker.tests.service.BookingService;
 import org.example.booker.tests.base.BaseTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +16,9 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UpdateBookingTest extends BaseTest {
+
+    private final BookingService bookingService = new BookingService();
+    private final AuthService authService = new AuthService();
     private String fullCookie;
 
     @BeforeAll
